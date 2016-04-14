@@ -9,6 +9,7 @@
 
 #include <iostream>
 #include <stdio.h>
+#include <cstdlib>
 
 #include "Slav.h"
 
@@ -48,20 +49,50 @@ void containers(Slav * slavs, int n)
 	printf("## vector\n");
 
 	// Umieść Słowian w losowej kolejności w wektorze.
-
+	
+	vectorOfSlavs.push_back(&slavs[0]);
+	
+	for(int i=1; i<n; i++) {
+ 		int position = rand() % vectorOfSlavs.size();
+ 		vectorOfSlavs.insert(vectorOfSlavs.begin()+position,&slavs[i]);
+ 	}
+	
+	// wskaznik na Slav, klasa
 	// Wykorzystując iterator i funkcję description(), wyświetl wszystkich Słowian w wektorze
-
+	vector<Slav*>::iterator iter = vectorOfSlavs.begin();
+	vector<Slav*>::iterator end = vectorOfSlavs.end();
+	
+	while(iter != end) {
+		cout << (*iter)->description() << endl;
+		iter++;
+	}
+	
+	
 	REPORT_CONTAINERS;
 	printf("## set\n");
-
+	
 	// Przenieś wszystkich Słowian z wektoru do zbioru.
+	for(int i=0; i<n; i++) {
+		setOfSlavs.insert(vectorOfSlavs[i]);
+	}
+	vectorOfSlavs.clear(); 
 	
 	REPORT_CONTAINERS;
 	printf("## map\n");
 
 	// Stwórz słownik tworzący pary Słowian, z tych znajdujących się w zbiorze, czyszcząc zbiór
+	set< Slav *>::iterator iter_setOfSlavs = setOfSlavs.begin();
+	
+	for(;iter_setOfSlavs!=setOfSlavs.end();iter_setOfSlavs=setOfSlavs.erase(iter_setOfSlavs)) {
+ 		mapOfSlavs[*iter_setOfSlavs]=*(iter_setOfSlavs=setOfSlavs.erase(iter_setOfSlavs));
+ 	}
 	
 	// Wykorzystując iterator, wyświetl wszystkie pary Słowian
+	for (map<Slav *, Slav *>::iterator iter=mapOfSlavs.begin(); iter!=mapOfSlavs.end(); iter++)
+ 	{
+ 		cout<<iter->first->description()<<"  =>  "<<iter->second->description()<<endl;
+ 	}
+    cout<<endl;
 	
 	REPORT_CONTAINERS;
 }
@@ -76,16 +107,28 @@ void adapters(Slav * slavs, int n)
 	printf("## queue\n");
 
 	// Umieść Słowian w kolejce.
+	for (int i = 0; i<n; i++){
+		queueOfSlavs.push(&slavs[i]);
+	}
 	
 	REPORT_ADAPTERS;
 
 	printf("## stack\n");
 	// Przenieś Słowian z kolejki do stosu.
+	while(!queueOfSlavs.empty()) {
+		stackOfSlavs.push(queueOfSlavs.front());
+		queueOfSlavs.pop();
+	}
+	
 
 	REPORT_ADAPTERS;
 
 	// Wyświetl Słowian zdejmowanych ze stosu.
-
+	while(!stackOfSlavs.empty()){
+		cout << (stackOfSlavs.top())->description() << endl;
+		stackOfSlavs.pop();
+	}
+	
 	REPORT_ADAPTERS;
 }
 

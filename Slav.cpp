@@ -1,5 +1,9 @@
 #include "Slav.h"
 #include <fstream>
+#include <time.h>
+#include <cstdlib>
+#include <iterator>
+#include <string>
 
 using namespace std;
 
